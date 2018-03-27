@@ -21,6 +21,29 @@ function createCanvas(){
   document.body.insertBefore(canvas, document.body.firstChild);
 }
 
+function addMobileControls(){
+  var left = document.createElement('div');
+  left.style.width = window.innerWidth / 2 + 'px';
+  left.style.height = '100%';
+  left.style.top = 0;
+  left.style.left = 0;
+  left.style.position = 'absolute';
+  left.addEventListener("touchstart", function(e){ direction = -1; });
+  left.addEventListener("touchend", function(e){ direction = 0; });
+
+  var right = document.createElement('div');
+  right.style.width = window.innerWidth / 2 + 'px';
+  right.style.height = '100%';
+  right.style.top = 0;
+  right.style.left = window.innerWidth / 2 + 'px';
+  right.style.position = 'absolute';
+  right.addEventListener("touchstart", function(e){ direction = 1; });
+  right.addEventListener("touchend", function(e){ direction = 0; });
+
+  document.body.insertBefore(right, document.body.firstChild);
+  document.body.insertBefore(left, document.body.firstChild);
+}
+
 //-----------------------------------------------------------------------------
 //  Called to start a new game
 function init(){
@@ -45,6 +68,8 @@ function init(){
     { a: { x: 2*gameSize/8, y: gameSize-10 }, b: { x: 6*gameSize/8, y: gameSize-10 }, rotate: false, colour: '#FFA726', count: 0 },
   ];
   rotateLines(Math.PI/4)
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+    addMobileControls();
 }
 
 //-----------------------------------------------------------------------------
