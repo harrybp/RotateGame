@@ -13,32 +13,37 @@
 //-----------------------------------------------------------------------------
 //  Creates game canvas of given size and adds to body
 function createCanvas(){
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+    addMobileControls();
   canvas = document.createElement("canvas");
   ctx = canvas.getContext("2d");
   canvas.width = gameSize;
   canvas.height = gameSize;
-  canvas.style.cssText += "display:block; margin: auto; width: " + gameSize + "px; height: " + gameSize + "px; ";
+  canvas.style.cssText += "display:block; margin: auto; width: " + gameSize + "px; height: " + gameSize + "px;";
   document.body.insertBefore(canvas, document.body.firstChild);
 }
 
 function addMobileControls(){
+  console.log('ss')
   var left = document.createElement('div');
   left.style.width = window.innerWidth / 2 + 'px';
-  left.style.height = '100%';
+  left.style.height = window.innerWidth + 'px';
   left.style.top = 0;
   left.style.left = 0;
   left.style.position = 'absolute';
   left.addEventListener("touchstart", function(e){ direction = -1; });
-  left.addEventListener("touchend", function(e){ direction = 0; });
+  left.addEventListener("touchend", function(e){ direction = 0; if(dead) init();});
 
   var right = document.createElement('div');
   right.style.width = window.innerWidth / 2 + 'px';
-  right.style.height = '100%';
+  right.style.height = window.innerWidth + 'px';
   right.style.top = 0;
   right.style.left = window.innerWidth / 2 + 'px';
   right.style.position = 'absolute';
   right.addEventListener("touchstart", function(e){ direction = 1; });
-  right.addEventListener("touchend", function(e){ direction = 0; });
+  right.addEventListener("touchend", function(e){ direction = 0;  if(dead) init();});
+
+  gameSize = window.innerWidth;
 
   document.body.insertBefore(right, document.body.firstChild);
   document.body.insertBefore(left, document.body.firstChild);
@@ -47,6 +52,7 @@ function addMobileControls(){
 //-----------------------------------------------------------------------------
 //  Called to start a new game
 function init(){
+  
   frameLength = 8;
   paused = dead = false;
   rotateSpeed = 1/128;
@@ -68,8 +74,7 @@ function init(){
     { a: { x: 2*gameSize/8, y: gameSize-10 }, b: { x: 6*gameSize/8, y: gameSize-10 }, rotate: false, colour: '#FFA726', count: 0 },
   ];
   rotateLines(Math.PI/4)
-  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
-    addMobileControls();
+  
 }
 
 //-----------------------------------------------------------------------------
